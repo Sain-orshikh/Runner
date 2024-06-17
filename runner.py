@@ -132,6 +132,14 @@ while True:
                         game_active = True
                         tries +=1
             start_time = pygame.time.get_ticks()
+            if event.type == pygame.KEYDOWN:
+                if (event.key == pygame.K_SPACE):
+                    game_active = True
+                    tries +=1
+            if event.type == pygame.KEYDOWN:
+                if (event.key == pygame.K_RETURN):
+                    game_active = True
+                    tries +=1
         if game_active:    
             if event.type == obstacle_timer:
                 if (randint(0,2) % 2 == 0):
