@@ -76,7 +76,7 @@ tries = 1
 score = 0
 wins = 0
 wins_add = True
-won = False
+spawn_obstacle = True
 active = 0
 paused = 1
 won = 2
@@ -223,9 +223,11 @@ while True:
         if (game_state == active):    
             if event.type == obstacle_timer:
                 if (randint(0,2) % 2 == 0):
-                    obstacle_rectangle_list.append(snail_rectangle)
+                    if(spawn_obstacle==True):
+                        obstacle_rectangle_list.append(snail_rectangle)
                 else:
-                    obstacle_rectangle_list.append(fly_rectangle)
+                    if(spawn_obstacle==True):
+                        obstacle_rectangle_list.append(fly_rectangle)
             if event.type == snail_animation_timer:
                 if snail_index == 0: snail_index = 1
                 else: snail_index = 0
@@ -239,6 +241,7 @@ while True:
     clock.tick(frame_rate)
 
     if (game_state == active):
+        spawn_obstacle = True
         player_animation()
         #screen.blit(ground_surface,(0,300))
         #screen.blit(sky_surface,(0,0))
@@ -255,12 +258,13 @@ while True:
             ground_rectangle.x = i * ground_surface_width + scroll
             #pygame.draw.rect(screen, (255, 0, 0), ground_rectangle, 1)
         screen.blit(player_surface,player_rectangle)
-        screen.blit(snail_surface,snail_rectangle)
+        #screen.blit(snail_surface,snail_rectangle)
         if(score>=10):
             screen.blit(spaceship_surface,spaceship_rectangle)
             spaceship_rectangle.y = 80
-            spaceship_rectangle.x = 700 - spaceship_scroll
+            spaceship_rectangle.x = 800 - spaceship_scroll
             spaceship_scroll +=smpf
+            spawn_obstacle = False
         #scroll background
 
         #reset scroll
@@ -321,15 +325,15 @@ while True:
         display_tries()
         display_wins()
     elif (game_state == won):
-        if (spaceship_rectangle.top > 0):
+        if (spaceship_rectangle.bottom > 30):
             screen.blit(ground_surface,(0,300))
             screen.blit(sky_surface,(0,0))
             screen.blit(spaceship_surface,spaceship_rectangle)
             spaceship_rectangle.y -=5
-        if (spaceship_rectangle.top <= 0):
+        if (spaceship_rectangle.bottom <= 30):
             screen.fill('Black')
             screen.blit(spaceship_surface,(50,50))
-            screen.blit(restart_surface, restart_rectangle)
+            screen.blit(restart_surface,(400,250))
             snail_rectangle = snail_surface.get_rect(midbottom = (800,300))
             player_rectangle = player_surface.get_rect(midbottom = (80,300))
             pmpf = 0
